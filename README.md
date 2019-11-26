@@ -8,7 +8,7 @@
 
 **item_db.json** — pre-re hercules item db, parsed using libconf.py and saved as `{'id': 'AegisName', ...}` dictionary; 
 
-**market.html** — vanilla-js app prototype (no jquery, no bootstrap) to render whole market and notify about low price; 
+**index.html** — vanilla-js app prototype (no jquery, no bootstrap) to render whole market and notify about low price; 
 
 
 ## How to use 
