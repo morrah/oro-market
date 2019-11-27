@@ -111,6 +111,7 @@ window.addEventListener('load', () => {
             console.log(i + ' ->' + preset);
             let found = 0;
             data.shops.filter(shop => {return shop['type'] == preset['shopType']}).forEach(shop => {
+                if (shop.items == null) return;
                 found += shop.items.filter(item => {
                     let refine = item['refine'] ? '+' + item['refine'] + ' ' : '';
                     let cards = item['cards'] ? '['+item['cards'].map(card => { return item_db[card] || card }).join(',')+']' : '';
@@ -147,6 +148,7 @@ window.addEventListener('load', () => {
         var shopType = document.querySelector('#filterVendors').checked ? 'V' : 'B';
         var items = [];
         data.shops.filter(shop => {return shop['type'] == shopType}).forEach(shop => {
+            if (shop.items == null) return;
             shop.items.forEach(item => {
                 let location = shop['location'] ? shop['location']['map'] + ' ' + shop['location']['x'] + ',' + shop['location']['y'] : '';
                 let title = shop['title'];
