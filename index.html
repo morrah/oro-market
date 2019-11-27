@@ -33,6 +33,7 @@
             <th class="sort asc" data-sort="price">price</th>
             <th class="sort" data-sort="location">location</th>
             <th class="sort" data-sort="title">title</th>
+            <th class="sort" data-sort="creationdate">creationdate</th>
         </tr>
     </thead>
     <tbody>
@@ -45,6 +46,7 @@
             <td class="price"></td>
             <td class="location"></td>
             <td class="title"></td>
+            <td class="creationdate"></td>
         </tr>
     </tbody>
 </table>
@@ -246,7 +248,8 @@ window.addEventListener('load', () => {
                     'amount': item['amount'], 
                     'price': item['price'],
                     'location': location,
-                    'title': title
+                    'title': title,
+                    'creationdate': shop['creationdate']
                 });
             });
         });
@@ -300,7 +303,7 @@ window.addEventListener('load', () => {
         });
         
     var options = {
-        valueNames: [ 'owner', 'item', 'amount', 'price', 'location', 'title' ]
+        valueNames: [ 'item_id', 'owner', 'item', 'amount', 'price', 'location', 'title', 'creationdate' ]
     };
     var marketList = new List('table', options);
     
