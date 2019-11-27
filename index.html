@@ -19,12 +19,14 @@
         <label>filter: <input class="search" id="search" type="text" /></label>
         <label>limit: <input class="" id="limit" type="text" /></label>
         <input class="" id="add_preset" type="button" value="add preset" />
+        <input class="" id="filterCheap" type="button" value="show 40% discount" />
     </div>
     <div id="preset_container"></div>
 </div>
 <table id="table">
     <thead>
         <tr>
+            <th class="item_id" style="display:none;"></th>
             <th class="sort" data-sort="owner">owner</th>
             <th class="sort" data-sort="item">item</th>
             <th class="sort" data-sort="amount">amount</th>
@@ -36,6 +38,7 @@
     <tbody>
     <tbody class="list">
         <tr>
+            <td class="item_id" style="display:none;"></td>
             <td class="owner"></td>
             <td class="item"></td>
             <td class="amount"></td>
@@ -106,6 +109,88 @@ window.addEventListener('load', () => {
             });
     }
 
+    function filterCheap(data, showUnique) {
+        let items = [];
+        data.shops.filter(shop => {return shop['type'] == 'V'}).forEach(shop => {
+            if (shop.items == null) return;
+            shop.items.forEach(item => {
+                let location = shop['location'] ? shop['location']['map'] + ' ' + shop['location']['x'] + ',' + shop['location']['y'] : '';
+                let title = shop['title'];
+                let refine = item['refine'] ? '+' + item['refine'] + ' ' : '';
+                let cards = item['cards'] ? '['+item['cards'].map(card => { return item_db[card] || card }).join(',')+']' : '';
+                items.push({
+                    'item_id': item['item_id'],
+                    'owner': shop['owner'], 
+                    'item': refine + (item_db[item['item_id']] || item['item_id']) + cards, 
+                    'amount': item['amount'], 
+                    'price': item['price'],
+                    'location': location,
+                    'title': title
+                });
+            });
+        });
+
+        // sort items by item id
+        items.sort((item1, item2) => {
+            return item1['item_id'] - item2['item_id'];
+        });
+
+        // loop over all items, group same id and calc its cheapness
+        let prevId; 
+        let itemGroup = [];
+        let cheapest;
+        let cheapestItems = [];
+        for (let i=0; i < items.length; i++) {
+            if ((prevId != items[i]['item_id']) && (itemGroup.length > 0)) {
+                cheapest = calcCheapest(itemGroup, showUnique);
+                if (cheapest) cheapestItems.push(cheapest);
+                itemGroup = [];
+            }
+            itemGroup.push(items[i]);
+            prevId = items[i]['item_id'];
+        }
+        // deal with last itemGroup
+        if (itemGroup.length > 0) {
+            cheapest = calcCheapest(itemGroup, showUnique);
+            if (cheapest) cheapestItems.push(cheapest);
+        }
+        return cheapestItems;
+    }
+
+    function calcCheapest(itemGroup, showUnique) {
+        if (itemGroup.length == 0) return;
+        if (itemGroup.length == 1) {
+            if (showUnique) return itemGroup[0];
+            return;
+        }
+
+        let tmpGroup = JSON.parse(JSON.stringify(itemGroup));
+        tmpGroup.sort((item1, item2) => {
+            return item1['price'] - item2['price'];
+        });
+        let median = findMedian(tmpGroup);
+
+        // 40% discount
+        if (tmpGroup[0]['price'] / median < 0.6) {
+            return tmpGroup[0];
+        }
+    }
+
+    function findMedian(data) {
+        // extract the .values field and sort the resulting array
+        var m = data.map(function(v) {
+            return v['price'];
+        }).sort(function(a, b) {
+            return a - b;
+        });
+        var middle = Math.floor((m.length - 1) / 2); // NB: operator precedence
+        if (m.length % 2) {
+            return m[middle];
+        } else {
+            return (m[middle] + m[middle + 1]) / 2.0;
+        }
+    }
+    
     function notify(data) {
         presets.forEach((preset, i) => {
             console.log(i + ' ->' + preset);
@@ -155,6 +240,7 @@ window.addEventListener('load', () => {
                 let refine = item['refine'] ? '+' + item['refine'] + ' ' : '';
                 let cards = item['cards'] ? '['+item['cards'].map(card => { return item_db[card] || card }).join(',')+']' : '';
                 items.push({
+                    'item_id': item['item_id'],
                     'owner': shop['owner'], 
                     'item': refine + (item_db[item['item_id']] || item['item_id']) + cards, 
                     'amount': item['amount'], 
@@ -269,7 +355,35 @@ window.addEventListener('load', () => {
             addPreset(preset['item'], preset['limit'], preset['shopType']);
         });
     }
+    
+    document.querySelector('#filterCheap').addEventListener('click', function() {
+        let cheapThings = filterCheap(market, false);
+        if (cheapThings.length == 0) {
+            console.log('nothing is cheap');
+            return;
+        }
+        marketList.filter(function(item) {
+            for (let i=0; i<cheapThings.length; i++) {
+                if (item.values().item_id == cheapThings[i]['item_id']) && (item.values().price == cheapThings[i]['price'])) {
+                   return true;
+                }
+            }
+            return false;
+        });
+    });
 });
+    
+if (!Array.prototype.includes) {
+  Object.defineProperty(Array.prototype, "includes", {
+    enumerable: false,
+    value: function(obj) {
+        var newArr = this.filter(function(el) {
+          return el == obj;
+        });
+        return newArr.length > 0;
+      }
+  });
+}
 </script>
 </body>
 </html>
