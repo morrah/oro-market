@@ -364,7 +364,7 @@ window.addEventListener('load', () => {
         }
         marketList.filter(function(item) {
             for (let i=0; i<cheapThings.length; i++) {
-                if (item.values().item_id == cheapThings[i]['item_id']) && (item.values().price == cheapThings[i]['price'])) {
+                if ( (item.values().item_id == cheapThings[i]['item_id']) && (item.values().price == cheapThings[i]['price']) ) {
                    return true;
                 }
             }
