@@ -40,7 +40,7 @@
     <tbody>
     <tbody class="list">
         <tr>
-            <td class="item_id" style="display:none;">item_id</td>
+            <td class="item_id" style="display:none;"></td>
             <td class="owner"></td>
             <td class="item"></td>
             <td class="amount"></td>
@@ -249,7 +249,7 @@ window.addEventListener('load', () => {
                     'item': refine + (item_db[item['item_id']] || item['item_id']) + cards, 
                     'amount': item['amount'], 
                     'price': item['price'],
-                    'price_formatted': parseInt(item['price']).toLocaleString('en-US'),
+                    'price_formatted': item['price'].toLocaleString('en-US'),
                     'location': location,
                     'title': title,
                     'creationdate': shop['creation_date']
@@ -306,7 +306,7 @@ window.addEventListener('load', () => {
         });
         
     var options = {
-        valueNames: [ 'item_id', 'owner', 'item', 'amount', 'price', 'location', 'title', 'creationdate' ]
+        valueNames: [ 'item_id', 'owner', 'item', 'amount', 'price', 'price_formatted', 'location', 'title', 'creationdate' ]
     };
     var marketList = new List('table', options);
     
