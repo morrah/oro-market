@@ -26,11 +26,12 @@
 <table id="table">
     <thead>
         <tr>
-            <th class="item_id" style="display:none;"></th>
+            <th style="display:none;">item_id</th>
             <th class="sort" data-sort="owner">owner</th>
             <th class="sort" data-sort="item">item</th>
             <th class="sort" data-sort="amount">amount</th>
-            <th class="sort asc" data-sort="price">price</th>
+            <th class="sort" style="display:none;" data-sort="price">price</th>
+            <th class="sort asc" data-sort="price_formatted">price</th>
             <th class="sort" data-sort="location">location</th>
             <th class="sort" data-sort="title">title</th>
             <th class="sort" data-sort="creationdate">creationdate</th>
@@ -39,11 +40,12 @@
     <tbody>
     <tbody class="list">
         <tr>
-            <td class="item_id" style="display:none;"></td>
+            <td class="item_id" style="display:none;">item_id</td>
             <td class="owner"></td>
             <td class="item"></td>
             <td class="amount"></td>
-            <td class="price"></td>
+            <td class="price" style="display:none;"></td>
+            <td class="price_formatted"></td>
             <td class="location"></td>
             <td class="title"></td>
             <td class="creationdate"></td>
@@ -247,6 +249,7 @@ window.addEventListener('load', () => {
                     'item': refine + (item_db[item['item_id']] || item['item_id']) + cards, 
                     'amount': item['amount'], 
                     'price': item['price'],
+                    'price_formatted': item['price'].toLocaleString('en-US'),
                     'location': location,
                     'title': title,
                     'creationdate': shop['creation_date']
