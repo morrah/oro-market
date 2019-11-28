@@ -249,7 +249,7 @@ window.addEventListener('load', () => {
                     'item': refine + (item_db[item['item_id']] || item['item_id']) + cards, 
                     'amount': item['amount'], 
                     'price': item['price'],
-                    'price_formatted': item['price'].toLocaleString('en-US'),
+                    'price_formatted': parseInt(item['price']).toLocaleString('en-US'),
                     'location': location,
                     'title': title,
                     'creationdate': shop['creation_date']
