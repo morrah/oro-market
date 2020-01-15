@@ -31,7 +31,7 @@
               
               <span class="cf-error-type">Error</span>
               <span class="cf-error-code">522</span>
-              <small class="heading-ray-id">Ray ID: 55585fa17f57d48c &bull; 2020-01-15 14:00:32 UTC</small>
+              <small class="heading-ray-id">Ray ID: 555866f68f59d498 &bull; 2020-01-15 14:05:32 UTC</small>
             </h1>
             <h2 class="cf-subheadline">Connection timed out</h2>
         </div><!-- /.error-overview -->
@@ -96,7 +96,7 @@
 
         <div class="cf-error-footer cf-wrapper">
   <p>
-    <span class="cf-footer-item">Cloudflare Ray ID: <strong>55585fa17f57d48c</strong></span>
+    <span class="cf-footer-item">Cloudflare Ray ID: <strong>555866f68f59d498</strong></span>
     <span class="cf-footer-separator">&bull;</span>
     <span class="cf-footer-item"><span>Your IP</span>: 91.122.56.11</span>
     <span class="cf-footer-separator">&bull;</span>
