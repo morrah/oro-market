@@ -69,6 +69,34 @@ table td {
 .right {
     float: right;
 }
+
+.preset-wrapper {
+    display: inline-block;
+}
+
+.preset-tooltip {
+    display: none;
+
+    position: relative;
+    top: 0;
+    botton: 0;
+    right: 0;
+    border: 1px solid #c0c0c0;
+    border-radius: 20px;
+    background: #333;
+    opacity: 0.8;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.preset-tooltip:hover {
+    background: red;
+}
+
+.preset-wrapper:hover .preset-tooltip {
+    display: inline-block;
+    z-index: 5;
+}
 </style>
 <script>
 var item_db, market, etag, hash;
@@ -327,6 +355,26 @@ window.addEventListener('load', () => {
     
     function addPreset(filter, limit, shopType) {
         var preset_container = document.getElementById('preset_container');
+        var btnWrapper = document.createElement('div');
+        btnWrapper.classList.add('preset-wrapper');
+        var newBtnTooltip = document.createElement('span');
+        newBtnTooltip.classList.add('preset-tooltip');
+        newBtnTooltip.innerHTML = 'x';
+        var that = this;
+        newBtnTooltip.addEventListener('click', function(){
+            if (presets) {
+                var btn = this.parentNode.querySelectorAll('input')[0];
+                if (btn) {
+                    var idx = btn.getAttribute('data-preset');
+                    console.log(idx);
+                    console.log(presets[idx]);
+                    presets.splice(idx, 1);
+                    localStorage.setItem('presets', JSON.stringify(presets));
+                    this.parentNode.remove();
+                }
+            }
+        });
+        
         var newBtn = document.createElement('input');
         newBtn.value = filter + (shopType == 'V' ? ' < ' : ' > ') + limit;
         newBtn.type = 'button';
@@ -342,7 +390,9 @@ window.addEventListener('load', () => {
             }
             redraw(market);
         });
-        document.getElementById('preset_container').appendChild(newBtn);
+        btnWrapper.appendChild(newBtn);
+        btnWrapper.appendChild(newBtnTooltip);
+        document.getElementById('preset_container').appendChild(btnWrapper);
     }
     
     document.querySelector('#add_preset').addEventListener('click', function() {
